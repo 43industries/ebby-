@@ -131,16 +131,21 @@ curl "https://api.telegram.org/bot<TOKEN>/deleteWebhook"
 
 ## 4. Point the website at production
 
-In `INDEX.HTML`, find the EBBY Bot integration block near the bottom:
+In `index.html`, find the EBBY Bot integration block near the bottom.
+Set **one** URL (no trailing slash):
 
 ```html
 <script>
-  window.EBBY_API = "http://localhost:8000";
+  window.EBBY_API = "https://your-service-name.onrender.com";
 </script>
-<script src="http://localhost:8000/widget/ebby-chat.js" defer></script>
 ```
 
-Change both URLs to your Render URL, e.g. `https://ebby-bot.onrender.com`.
+The second script loads `ebby-chat.js` from that same host automatically.
+Replace the placeholder `your-ebby-bot.onrender.com` with your real Render
+URL after the first deploy, then redeploy your Vercel site.
+
+For **local development only**, temporarily set `window.EBBY_API` to
+`http://127.0.0.1:8765` (or whatever port uvicorn uses).
 
 ## 5. View leads
 

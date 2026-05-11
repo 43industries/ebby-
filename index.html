@@ -664,6 +664,10 @@
                 showToast('Form is not configured (missing API base URL).');
                 return;
             }
+            if (apiBase.indexOf('your-ebby-bot.onrender.com') !== -1) {
+                showToast('Deploy the bot on Render, then set window.EBBY_API in index.html to your real API URL.');
+                return;
+            }
 
             submitBtn.disabled = true;
             const originalLabel = submitLabel.textContent;
@@ -724,14 +728,32 @@
     </script>
 
     <!-- ==========================================================
-         EBBY Bot integration
-         Set EBBY_API to your deployed bot URL (e.g. Render).
-         For local dev with `uvicorn` on port 8000, use:
-           window.EBBY_API = "http://localhost:8000";
+         EBBY Bot (FastAPI on Render / Railway / Fly — not on Vercel)
+         1. Deploy the `bot/` folder (see render.yaml + bot/README.md).
+         2. Replace the URL below with your live API base (https, no trailing slash).
+         3. Redeploy Vercel so this page picks up the change.
+
+         Local dev: temporarily set to http://127.0.0.1:8765 (or your uvicorn port).
          ========================================================== -->
     <script>
-        window.EBBY_API = "http://localhost:8765";
+        window.EBBY_API = "https://your-ebby-bot.onrender.com";
     </script>
-    <script src="http://localhost:8765/widget/ebby-chat.js" defer></script>
+    <script>
+        (function () {
+            var raw = window.EBBY_API || "";
+            var base = raw.replace(/\/+$/, "");
+            var placeholder = "your-ebby-bot.onrender.com";
+            if (!base || base.indexOf(placeholder) !== -1) {
+                console.warn(
+                    "[EBBY] Set window.EBBY_API in index.html to your deployed bot URL, then redeploy Vercel."
+                );
+                return;
+            }
+            var s = document.createElement("script");
+            s.src = base + "/widget/ebby-chat.js";
+            s.defer = true;
+            document.body.appendChild(s);
+        })();
+    </script>
 </body>
 </html>

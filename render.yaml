@@ -1,0 +1,25 @@
+# Render Blueprint — deploy the FastAPI bot from the `bot/` directory.
+#
+# Dashboard: New → Blueprint → connect this repo → Render reads this file.
+#
+# After deploy, copy the service URL (e.g. https://ebby-bot-xxxx.onrender.com),
+# set it in index.html as window.EBBY_API, commit, and redeploy Vercel.
+#
+# Required env vars (add in Render dashboard → Environment):
+#   GROQ_API_KEY
+#   TELEGRAM_BOT_TOKEN          (or leave placeholder-like token skipped by app — better: real token)
+#   TELEGRAM_WEBHOOK_SECRET     (random string)
+#   ADMIN_CHAT_ID               (Telegram DM target for leads)
+#   PUBLIC_BASE_URL             (same as https URL of this service, no trailing slash)
+#   ADMIN_API_TOKEN             (random string for GET /leads)
+# Optional:
+#   ALLOWED_ORIGINS=https://your-site.vercel.app
+
+services:
+  - type: web
+    name: ebby-bot
+    runtime: python
+    plan: free
+    rootDir: bot
+    buildCommand: pip install --prefer-binary -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
