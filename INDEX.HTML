@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EBBY — Turning Ideas Into Working Digital Products</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        ebby: {
+                            dark: '#0a0a0f',
+                            card: '#12121a',
+                            accent: '#6366f1',
+                            accentHover: '#4f46e5',
+                            surface: '#1a1a25',
+                            border: '#2a2a3a'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'slide-up': 'slideUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0a0a0f;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #818cf8 0%, #c084fc 50%, #f472b6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .glass-card {
+            background: rgba(18, 18, 26, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .glow {
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+        
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
+        }
+        
+        .grid-bg {
+            background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .nav-scrolled {
+            background: rgba(10, 10, 15, 0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+<base target="_blank">
+</head>
+<body class="font-sans antialiased">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-6">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
+                        <span class="text-white font-display font-bold text-xl">E</span>
+                    </div>
+                    <span class="font-display font-bold text-2xl tracking-tight text-white">EBBY</span>
+                </div>
+                
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#services" class="text-sm font-medium text-gray-400 hover:text-white transition-colors">Services</a>
+                    <a href="#process" class="text-sm font-medium text-gray-400 hover:text-white transition-colors">Process</a>
+                    <a href="#pricing" class="text-sm font-medium text-gray-400 hover:text-white transition-colors">Pricing</a>
+                    <a href="#contact" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-full transition-all hover:scale-105">
+                        Start Project
+                    </a>
+                </div>
+                
+                <button id="mobile-menu-btn" class="md:hidden text-white">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-ebby-dark border-b border-ebby-border p-6">
+            <div class="flex flex-col gap-4">
+                <a href="#services" class="text-gray-400 hover:text-white">Services</a>
+                <a href="#process" class="text-gray-400 hover:text-white">Process</a>
+                <a href="#pricing" class="text-gray-400 hover:text-white">Pricing</a>
+                <a href="#contact" class="text-indigo-400 font-semibold">Start Project</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden grid-bg">
+        <!-- Animated Background Elements -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl animate-pulse-slow"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl animate-pulse-slow" style="animation-delay: 2s;"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600/10 rounded-full blur-3xl"></div>
+        </div>
+
+        <div class="relative max-w-7xl mx-auto px-6 lg:px-8 text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-ebby-surface border border-ebby-border mb-8 animate-slide-up">
+                <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                <span class="text-sm text-gray-300">Now serving SMEs across Kenya</span>
+            </div>
+            
+            <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-bold leading-tight mb-6 animate-slide-up" style="animation-delay: 0.1s;">
+                Turning Ideas Into<br>
+                <span class="gradient-text">Working Digital Products</span>
+            </h1>
+            
+            <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 animate-slide-up" style="animation-delay: 0.2s;">
+                Modern software development studio & SaaS company. We build AI-powered business automation, school management systems, and custom SME solutions for the Kenyan market.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up" style="animation-delay: 0.3s;">
+                <a href="#contact" class="px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-full transition-all hover:scale-105 glow flex items-center gap-2">
+                    Start Your Project
+                    <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </a>
+                <a href="#services" class="px-8 py-4 bg-ebby-surface hover:bg-ebby-border text-white font-semibold rounded-full transition-all border border-ebby-border flex items-center gap-2">
+                    Explore Services
+                    <i data-lucide="chevron-down" class="w-5 h-5"></i>
+                </a>
+            </div>
+
+            <!-- Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20 pt-10 border-t border-ebby-border/50 animate-slide-up" style="animation-delay: 0.4s;">
+                <div>
+                    <div class="text-3xl font-display font-bold text-white">50+</div>
+                    <div class="text-sm text-gray-500 mt-1">Projects Delivered</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-display font-bold text-white">98%</div>
+                    <div class="text-sm text-gray-500 mt-1">Client Satisfaction</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-display font-bold text-white">24/7</div>
+                    <div class="text-sm text-gray-500 mt-1">Support Available</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-display font-bold text-white">&lt;2wk</div>
+                    <div class="text-sm text-gray-500 mt-1">Avg. Delivery</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="font-display text-3xl md:text-5xl font-bold mb-4">What We Build</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Specialized solutions designed for the unique challenges of Kenyan small businesses and institutions.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- School Systems -->
+                <div class="service-card glass-card rounded-2xl p-8 transition-all duration-300 reveal group cursor-pointer">
+                    <div class="w-14 h-14 bg-blue-500/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-500/20 transition-colors">
+                        <i data-lucide="graduation-cap" class="w-7 h-7 text-blue-400"></i>
+                    </div>
+                    <h3 class="font-display text-2xl font-bold mb-3 text-white">School Management Systems</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">
+                        Complete digital transformation for schools. Student portals, fee management, exam analytics, parent communication, and timetable automation.
+                    </p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center gap-3 text-sm text-gray-300">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-blue-400"></i>
+                            Student Information System
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-300">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-blue-400"></i>
+                            Automated Fee Collection (M-Pesa)
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-300">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-blue-400"></i>
+                            Parent-Teacher Communication
+                        </li>
+                    </ul>
+                    <div class="flex items-center text-blue-400 font-semibold text-sm group-hover:gap-2 transition-all">
+                        Learn more <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                    </div>
+                </div>
+
+                <!-- AI Business Automation -->
+                <div class="service-card glass-card rounded-2xl p-8 transition-all duration-300 reveal group cursor-pointer" style="transition-delay: 0.1s;">
+                    <div class="w-14 h-14 bg-purple-500/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-purple-500/20 transition-colors">
+                        <i data-lucide="brain-circuit" class="w-7 h-7 text-purple-400"></i>
+                    </div>
+                    <h3 class="font-display text-2xl font-bold mb-3 text-white">AI-Powered Automation</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">
+                        Smart workflows that eliminate repetitive tasks. AI chatbots, document processing, automated reporting, and intelligent data entry.
+                    </p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center gap-3 text-sm text-gray-300">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-purple-400"></i>
+                            Custom AI Chatbots
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-300">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-purple-400"></i>
+                            Automated Invoice Generation
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-300">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-purple-400"></i>
+                            Smart Data Analytics Dashboard
+                        </li>
+                    </ul>
+                    <div class="flex items-center text-purple-400 font-semibold text-sm group-hover:gap-2 transition-all">
+                        Learn more <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                    </div>
+                </div>
+
+                <!-- SME Business Systems -->
+                <div class="service-card glass-card rounded-2xl p-8 transition-all duration-300 reveal group cursor-pointer" style="transition-delay: 0.2s;">
+                    <div class="w-14 h-14 bg-emerald-500/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-emerald-500/20 transition-colors">
+                        <i data-lucide="building-2" class="w-7 h-7 text-emerald-400"></i>
+                    </div>
+                    <h3 class="font-display text-2xl font-bold mb-3 text-white">SME Business Systems</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">
+                        End-to-end business software tailored for Kenyan SMEs. Inventory, POS, HR, accounting integration, and mobile-first design.
+                    </p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center gap-3 text-sm text-gray-300">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+                            Inventory & Stock Control
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-300">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+                            Point of Sale (POS) Systems
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-300">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+                            M-Pesa & Bank Integration
+                        </li>
+                    </ul>
+                    <div class="flex items-center text-emerald-400 font-semibold text-sm group-hover:gap-2 transition-all">
+                        Learn more <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section id="process" class="py-24 bg-ebby-card/30">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="font-display text-3xl md:text-5xl font-bold mb-4">How We Work</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">From idea to launch in four simple steps. Transparent, collaborative, and efficient.</p>
+            </div>
+
+            <div class="grid md:grid-cols-4 gap-8 relative">
+                <!-- Connecting Line -->
+                <div class="hidden md:block absolute top-12 left-0 w-full h-0.5 bg-gradient-to-r from-indigo-500/0 via-indigo-500/50 to-indigo-500/0"></div>
+
+                <div class="relative text-center reveal">
+                    <div class="w-24 h-24 mx-auto bg-ebby-surface border border-ebby-border rounded-2xl flex items-center justify-center mb-6 relative z-10">
+                        <span class="font-display text-3xl font-bold text-indigo-400">01</span>
+                    </div>
+                    <h3 class="font-display text-xl font-bold mb-2">Discovery</h3>
+                    <p class="text-sm text-gray-400">We understand your business, challenges, and goals through detailed consultation.</p>
+                </div>
+
+                <div class="relative text-center reveal" style="transition-delay: 0.1s;">
+                    <div class="w-24 h-24 mx-auto bg-ebby-surface border border-ebby-border rounded-2xl flex items-center justify-center mb-6 relative z-10">
+                        <span class="font-display text-3xl font-bold text-purple-400">02</span>
+                    </div>
+                    <h3 class="font-display text-xl font-bold mb-2">Design & Prototype</h3>
+                    <p class="text-sm text-gray-400">Wireframes and interactive prototypes for your approval before development.</p>
+                </div>
+
+                <div class="relative text-center reveal" style="transition-delay: 0.2s;">
+                    <div class="w-24 h-24 mx-auto bg-ebby-surface border border-ebby-border rounded-2xl flex items-center justify-center mb-6 relative z-10">
+                        <span class="font-display text-3xl font-bold text-pink-400">03</span>
+                    </div>
+                    <h3 class="font-display text-xl font-bold mb-2">Development</h3>
+                    <p class="text-sm text-gray-400">Agile development with weekly updates, testing, and quality assurance.</p>
+                </div>
+
+                <div class="relative text-center reveal" style="transition-delay: 0.3s;">
+                    <div class="w-24 h-24 mx-auto bg-ebby-surface border border-ebby-border rounded-2xl flex items-center justify-center mb-6 relative z-10">
+                        <span class="font-display text-3xl font-bold text-emerald-400">04</span>
+                    </div>
+                    <h3 class="font-display text-xl font-bold mb-2">Launch & Support</h3>
+                    <p class="text-sm text-gray-400">Deployment, training, and ongoing maintenance with 24/7 support.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-24">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="font-display text-3xl md:text-5xl font-bold mb-4">Simple, Transparent Pricing</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">No hidden fees. Choose a package that fits your business stage.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Starter -->
+                <div class="glass-card rounded-2xl p-8 reveal hover:border-indigo-500/50 transition-all">
+                    <div class="mb-6">
+                        <h3 class="font-display text-xl font-bold text-gray-300 mb-2">Starter</h3>
+                        <div class="flex items-baseline gap-1">
+                            <span class="text-4xl font-display font-bold text-white">KSh 75k</span>
+                            <span class="text-gray-500">/project</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2">Perfect for small shops & startups</p>
+                    </div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center gap-3 text-sm text-gray-300">
+                            <i data-lucide="check" class="w-5 h-5 text-indigo-400"></i>
+                            Single-page website or landing page
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-300">
+                            <i data-lucide="check" class="w-5 h-5 text-indigo-400"></i>
+                            Basic M-Pesa integration
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-300">
+                            <i data-lucide="check" class="w-5 h-5 text-indigo-400"></i>
+                            Mobile responsive design
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-300">
+                            <i data-lucide="check" class="w-5 h-5 text-indigo-400"></i>
+                            1 month support
+                        </li>
+                    </ul>
+                    <button onclick="selectPlan('Starter')" class="w-full py-3 border border-ebby-border hover:border-indigo-500 text-white font-semibold rounded-xl transition-all hover:bg-indigo-500/10">
+                        Get Started
+                    </button>
+                </div>
+
+                <!-- Professional -->
+                <div class="glass-card rounded-2xl p-8 border-indigo-500/50 relative reveal transform md:-translate-y-4" style="transition-delay: 0.1s;">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-indigo-600 text-white text-xs font-bold rounded-full">
+                        MOST POPULAR
+                    </div>
+                    <div class="mb-6">
+                        <h3 class="font-display text-xl font-bold text-white mb-2">Business</h3>
+                        <div class="flex items-baseline gap-1">
+                            <span class="text-4xl font-display font-bold text-white">KSh 250k</span>
+                            <span class="text-gray-500">/project</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2">For growing SMEs & schools</p>
+                    </div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center gap-3 text-sm text-gray-300">
+                            <i data-lucide="check" class="w-5 h-5 text-indigo-400"></i>
+                            Full management system (ERP/CRM)
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-300">
+                            <i data-lucide="check" class="w-5 h-5 text-indigo-400"></i>
+                            Advanced M-Pesa & bank APIs
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-300">
+                            <i data-lucide="check" class="w-5 h-5 text-indigo-400"></i>
+                            AI-powered reporting dashboard
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-300">
+                            <i data-lucide="check" class="w-5 h-5 text-indigo-400"></i>
+                            User roles & permissions
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-300">
+                            <i data-lucide="check" class="w-5 h-5 text-indigo-400"></i>
+                            6 months priority support
+                        </li>
+                    </ul>
+                    <button onclick="selectPlan('Business')" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-all glow">
+                        Get Started
+                    </button>
+                </div>
+
+                <!-- Enterprise -->
+                <div class="glass-card rounded-2xl p-8 reveal hover:border-purple-500/50 transition-all" style="transition-delay: 0.2s;">
+                    <div class="mb-6">
+                        <h3 class="font-display text-xl font-bold text-gray-300 mb-2">Enterprise</h3>
+                        <div class="flex items-baseline gap-1">
+                            <span class="text-4xl font-display font-bold text-white">Custom</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2">Large institutions & complex systems</p>
+                    </div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center gap-3 text-sm text-gray-300">
+                            <i data-lucide="check" class="w-5 h-5 text-purple-400"></i>
+                            Everything in Business, plus:
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-300">
+                            <i data-lucide="check" class="w-5 h-5 text-purple-400"></i>
+                            Custom AI model training
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-300">
+                            <i data-lucide="check" class="w-5 h-5 text-purple-400"></i>
+                            Multi-branch deployment
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-300">
+                            <i data-lucide="check" class="w-5 h-5 text-purple-400"></i>
+                            Dedicated server infrastructure
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-300">
+                            <i data-lucide="check" class="w-5 h-5 text-purple-400"></i>
+                            24/7 dedicated support & SLA
+                        </li>
+                    </ul>
+                    <button onclick="selectPlan('Enterprise')" class="w-full py-3 border border-ebby-border hover:border-purple-500 text-white font-semibold rounded-xl transition-all hover:bg-purple-500/10">
+                        Contact Sales
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-24 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-indigo-900/20 to-purple-900/20"></div>
+        <div class="absolute inset-0 grid-bg opacity-30"></div>
+        
+        <div class="relative max-w-4xl mx-auto px-6 lg:px-8 text-center reveal">
+            <h2 class="font-display text-4xl md:text-6xl font-bold mb-6">Ready to Digitize Your Business?</h2>
+            <p class="text-xl text-gray-400 mb-10">Join 50+ Kenyan businesses already using EBBY to automate, scale, and succeed.</p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="#contact" class="px-8 py-4 bg-white text-ebby-dark font-bold rounded-full hover:scale-105 transition-transform flex items-center gap-2">
+                    Book Free Consultation
+                    <i data-lucide="calendar" class="w-5 h-5"></i>
+                </a>
+                <a href="tel:+254712345678" class="px-8 py-4 border border-white/20 text-white font-semibold rounded-full hover:bg-white/10 transition-all flex items-center gap-2">
+                    <i data-lucide="phone" class="w-5 h-5"></i>
+                    Call Us Now
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 bg-ebby-card/30">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-16">
+                <div class="reveal">
+                    <h2 class="font-display text-3xl md:text-5xl font-bold mb-6">Let's Build Something Great</h2>
+                    <p class="text-gray-400 mb-10 text-lg">Tell us about your project. We'll get back within 24 hours with a roadmap and quote.</p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-indigo-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="map-pin" class="w-6 h-6 text-indigo-400"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white mb-1">Location</h4>
+                                <p class="text-gray-400">Nairobi, Kenya</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-indigo-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="mail" class="w-6 h-6 text-indigo-400"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white mb-1">Email</h4>
+                                <p class="text-gray-400">hello@ebby.co.ke</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-indigo-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="phone" class="w-6 h-6 text-indigo-400"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white mb-1">Phone</h4>
+                                <p class="text-gray-400">+254 712 345 678</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="contactForm" class="glass-card rounded-2xl p-8 reveal" style="transition-delay: 0.2s;">
+                    <div class="space-y-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-400 mb-2">Name</label>
+                                <input type="text" name="name" required class="w-full px-4 py-3 bg-ebby-dark border border-ebby-border rounded-xl text-white focus:border-indigo-500 focus:outline-none transition-colors" placeholder="John Doe">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-400 mb-2">Phone</label>
+                                <input type="tel" name="phone" required class="w-full px-4 py-3 bg-ebby-dark border border-ebby-border rounded-xl text-white focus:border-indigo-500 focus:outline-none transition-colors" placeholder="+254 7XX XXX XXX">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Email</label>
+                            <input type="email" name="email" required class="w-full px-4 py-3 bg-ebby-dark border border-ebby-border rounded-xl text-white focus:border-indigo-500 focus:outline-none transition-colors" placeholder="john@company.co.ke">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Service Interested In</label>
+                            <select id="serviceSelect" name="service" class="w-full px-4 py-3 bg-ebby-dark border border-ebby-border rounded-xl text-white focus:border-indigo-500 focus:outline-none transition-colors">
+                                <option>School Management System</option>
+                                <option>AI Business Automation</option>
+                                <option>SME Business System</option>
+                                <option>Custom Development</option>
+                                <option>Not Sure Yet</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Project Details</label>
+                            <textarea rows="4" name="details" required class="w-full px-4 py-3 bg-ebby-dark border border-ebby-border rounded-xl text-white focus:border-indigo-500 focus:outline-none transition-colors resize-none" placeholder="Tell us about your business and what you need..."></textarea>
+                        </div>
+                        
+                        <button type="submit" id="contactSubmitBtn" class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all hover:scale-[1.02] flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
+                            <span id="contactSubmitLabel">Send Message</span>
+                            <i data-lucide="send" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-ebby-border py-12">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-12">
+                <div class="col-span-2">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-display font-bold">E</span>
+                        </div>
+                        <span class="font-display font-bold text-xl text-white">EBBY</span>
+                    </div>
+                    <p class="text-gray-500 max-w-sm">Turning ideas into working digital products. Modern software for Kenyan small businesses, schools, and enterprises.</p>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-white mb-4">Services</h4>
+                    <ul class="space-y-2 text-sm text-gray-500">
+                        <li><a href="#" class="hover:text-indigo-400 transition-colors">School Systems</a></li>
+                        <li><a href="#" class="hover:text-indigo-400 transition-colors">AI Automation</a></li>
+                        <li><a href="#" class="hover:text-indigo-400 transition-colors">SME Solutions</a></li>
+                        <li><a href="#" class="hover:text-indigo-400 transition-colors">Custom Development</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-white mb-4">Company</h4>
+                    <ul class="space-y-2 text-sm text-gray-500">
+                        <li><a href="#" class="hover:text-indigo-400 transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-indigo-400 transition-colors">Case Studies</a></li>
+                        <li><a href="#" class="hover:text-indigo-400 transition-colors">Careers</a></li>
+                        <li><a href="#" class="hover:text-indigo-400 transition-colors">Blog</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-ebby-border pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                <p class="text-sm text-gray-600"> 2026 EBBY Technologies. All rights reserved.</p>
+                <div class="flex items-center gap-6">
+                    <a href="#" class="text-gray-600 hover:text-white transition-colors"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                    <a href="#" class="text-gray-600 hover:text-white transition-colors"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                    <a href="#" class="text-gray-600 hover:text-white transition-colors"><i data-lucide="github" class="w-5 h-5"></i></a>
+                    <a href="#" class="text-gray-600 hover:text-white transition-colors"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-ebby-surface border border-ebby-border text-white px-6 py-4 rounded-xl shadow-2xl transform translate-y-24 transition-transform duration-300 z-50 flex items-center gap-3">
+        <i data-lucide="check-circle" class="w-5 h-5 text-green-400"></i>
+        <span id="toastMessage">Message sent successfully!</span>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('nav-scrolled');
+            } else {
+                navbar.classList.remove('nav-scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Scroll reveal animation
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // Form handling -- POST to the EBBY Bot API /lead endpoint
+        document.getElementById('contactForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+            const data = Object.fromEntries(new FormData(form).entries());
+            const apiBase = (window.EBBY_API || '').replace(/\/+$/, '');
+            const submitBtn = document.getElementById('contactSubmitBtn');
+            const submitLabel = document.getElementById('contactSubmitLabel');
+
+            if (!apiBase) {
+                showToast('Form is not configured (missing API base URL).');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            const originalLabel = submitLabel.textContent;
+            submitLabel.textContent = 'Sending...';
+            try {
+                const resp = await fetch(apiBase + '/lead', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: data.name,
+                        phone: data.phone,
+                        email: data.email,
+                        service: data.service,
+                        details: data.details,
+                        source: 'website-form'
+                    })
+                });
+                if (!resp.ok) throw new Error('bad-status');
+                showToast('Thank you! We will contact you within 24 hours.');
+                form.reset();
+            } catch (err) {
+                showToast('Sorry, something went wrong. Please try again or email hello@ebby.co.ke.');
+            } finally {
+                submitLabel.textContent = originalLabel;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Plan selection
+        function selectPlan(plan) {
+            document.getElementById('serviceSelect').value = plan === 'Starter' ? 'Custom Development' : 
+                                                             plan === 'Business' ? 'SME Business System' : 'Custom Development';
+            document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+            showToast(`${plan} plan selected. Fill in your details!`);
+        }
+
+        // Toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.classList.remove('translate-y-24');
+            setTimeout(() => {
+                toast.classList.add('translate-y-24');
+            }, 4000);
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+
+    <!-- ==========================================================
+         EBBY Bot integration
+         Set EBBY_API to your deployed bot URL (e.g. Render).
+         For local dev with `uvicorn` on port 8000, use:
+           window.EBBY_API = "http://localhost:8000";
+         ========================================================== -->
+    <script>
+        window.EBBY_API = "http://localhost:8765";
+    </script>
+    <script src="http://localhost:8765/widget/ebby-chat.js" defer></script>
+</body>
+</html>

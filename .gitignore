@@ -1,0 +1,26 @@
+# --- secrets / local state ---
+.env
+.env.*
+!.env.example
+*.db
+*.sqlite
+*.sqlite3
+
+# --- python ---
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+
+# --- editors / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- logs ---
+*.log
