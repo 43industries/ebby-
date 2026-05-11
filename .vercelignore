@@ -1,0 +1,7 @@
+bot/
+.commit-msg.tmp
+*.db
+.env
+.env.*
+.venv/
+__pycache__/
