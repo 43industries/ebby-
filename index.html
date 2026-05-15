@@ -651,24 +651,23 @@
 
         revealElements.forEach(el => revealObserver.observe(el));
 
-        // Contact form — POST to EBBY Bot API /lead (Render)
+        function ebbyApiBase() {
+            var raw = (window.EBBY_API || '').trim();
+            if (!raw || raw.indexOf('your-ebby-bot.onrender.com') !== -1) {
+                return window.location.origin.replace(/\/+$/, '');
+            }
+            return raw.replace(/\/+$/, '');
+        }
+
+        // Contact form — POST to EBBY Bot API /lead (same host on Render)
         document.getElementById('contactForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const form = e.target;
             const data = Object.fromEntries(new FormData(form).entries());
-            const apiBase = (window.EBBY_API || '').replace(/\/+$/, '');
+            const apiBase = ebbyApiBase();
             const submitBtn = document.getElementById('contactSubmitBtn');
             const submitLabel = document.getElementById('contactSubmitLabel');
             const originalLabel = submitLabel.textContent;
-
-            if (!apiBase) {
-                showToast('Form is not configured (missing API base URL).');
-                return;
-            }
-            if (apiBase.indexOf('your-ebby-bot.onrender.com') !== -1) {
-                showToast('Bot is not deployed yet. Email hello@ebby.co.ke or try the chat when live.');
-                return;
-            }
 
             submitBtn.disabled = true;
             submitLabel.textContent = 'Sending…';
@@ -727,19 +726,16 @@
         });
     </script>
 
-    <!-- EBBY Bot — API on Render (injected at build via scripts/inject-ebby-api.mjs) -->
+    <!-- EBBY chat widget (API on same host when deployed to Render) -->
     <script>
         window.EBBY_API = "https://your-ebby-bot.onrender.com";
     </script>
     <script>
         (function () {
-            var raw = window.EBBY_API || "";
-            var base = raw.replace(/\/+$/, "");
-            var placeholder = "your-ebby-bot.onrender.com";
-            if (!base || base.indexOf(placeholder) !== -1) {
-                console.warn("[EBBY] Bot URL not configured yet.");
-                return;
-            }
+            var raw = (window.EBBY_API || "").trim();
+            var base = (!raw || raw.indexOf("your-ebby-bot.onrender.com") !== -1)
+                ? window.location.origin.replace(/\/+$/, "")
+                : raw.replace(/\/+$/, "");
             var s = document.createElement("script");
             s.src = base + "/widget/ebby-chat.js";
             s.defer = true;

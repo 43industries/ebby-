@@ -5,6 +5,7 @@
   "scripts": {
     "build:site": "node scripts/build-static.mjs",
     "verify:live": "node scripts/verify-live.mjs",
-    "verify:bot": "node scripts/verify-bot.mjs"
+    "verify:bot": "node scripts/verify-bot.mjs",
+    "verify:deploy": "node scripts/verify-deploy.mjs"
   }
 }

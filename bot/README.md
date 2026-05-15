@@ -141,9 +141,10 @@ Set **one** URL (no trailing slash):
 ```
 
 The second script loads `ebby-chat.js` from that same host automatically.
-On **Render**, the root `render.yaml` blueprint deploys both `ebby-site`
-(static) and `ebby-bot` (Python). The site build injects `EBBY_API_URL`
-automatically from the bot service — no manual URL edit needed.
+On **Render**, the root `render.yaml` deploys one service **`ebby`**
+(Python) that serves the marketing page at `/` and the API at `/chat`,
+`/lead`, `/widget/ebby-chat.js`, etc. Connect repo **`43industries/ebby-`**
+(not `43industries/43`). Set **`GROQ_API_KEY`** in the Render dashboard.
 
 For **local development only**, temporarily set `window.EBBY_API` to
 `http://127.0.0.1:8765` (or whatever port uvicorn uses).

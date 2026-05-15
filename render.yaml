@@ -1,42 +1,24 @@
-# Render Blueprint — marketing site (static) + FastAPI bot (`bot/`).
-# Dashboard: New → Blueprint → connect repo → add secret env vars below.
+# One Render web service: marketing site + bot API (repo: 43industries/ebby-)
+#
+# Dashboard: New → Blueprint → connect this repo (replace the old "43" Flask service).
+# Required on service "ebby": GROQ_API_KEY
+# Optional: TELEGRAM_BOT_TOKEN, ADMIN_CHAT_ID
 
 services:
   - type: web
-    name: ebby-site
-    runtime: static
-    buildCommand: node scripts/build-static.mjs
-    staticPublishPath: ./dist
-    envVars:
-      - key: EBBY_API_URL
-        fromService:
-          name: ebby-bot
-          type: web
-          envVarKey: RENDER_EXTERNAL_URL
-
-  - type: web
-    name: ebby-bot
+    name: ebby
     runtime: python
     plan: free
     rootDir: bot
-    buildCommand: pip install --prefer-binary -r requirements.txt
+    buildCommand: pip install --prefer-binary -r requirements.txt && cd .. && node scripts/build-static.mjs
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: PUBLIC_BASE_URL
         fromService:
-          name: ebby-bot
-          type: web
-          envVarKey: RENDER_EXTERNAL_URL
-      - key: ALLOWED_ORIGINS
-        fromService:
-          name: ebby-site
+          name: ebby
           type: web
           envVarKey: RENDER_EXTERNAL_URL
       - key: TELEGRAM_WEBHOOK_SECRET
         generateValue: true
       - key: ADMIN_API_TOKEN
         generateValue: true
-      # Set in Render dashboard (required for chat + Telegram):
-      #   GROQ_API_KEY
-      # Optional:
-      #   TELEGRAM_BOT_TOKEN, ADMIN_CHAT_ID, SMTP_*

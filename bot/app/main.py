@@ -37,6 +37,18 @@ log = logging.getLogger("ebby")
 
 
 WIDGET_PATH = Path(__file__).resolve().parent.parent / "widget" / "ebby-chat.js"
+REPO_ROOT = Path(__file__).resolve().parent.parent.parent
+SITE_INDEX_CANDIDATES = (
+    REPO_ROOT / "dist" / "index.html",
+    REPO_ROOT / "index.html",
+)
+
+
+def _marketing_index() -> Path | None:
+    for path in SITE_INDEX_CANDIDATES:
+        if path.is_file():
+            return path
+    return None
 
 
 @asynccontextmanager
@@ -89,11 +101,16 @@ async def health() -> HealthResponse:
 
 
 @app.get("/")
-async def root() -> dict:
+async def site_root():
+    """Marketing site at / when dist/ or index.html exists; else API discovery JSON."""
+    index = _marketing_index()
+    if index is not None:
+        return FileResponse(index, media_type="text/html")
     return {
         "name": "EBBY Bot API",
         "endpoints": ["/health", "/chat", "/lead", "/widget/ebby-chat.js"],
         "welcome": WELCOME_MESSAGE,
+        "hint": "Run `node scripts/build-static.mjs` from repo root for the marketing page.",
     }
 
 
