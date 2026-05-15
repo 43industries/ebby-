@@ -141,8 +141,9 @@ Set **one** URL (no trailing slash):
 ```
 
 The second script loads `ebby-chat.js` from that same host automatically.
-Replace the placeholder `your-ebby-bot.onrender.com` with your real Render
-URL after the first deploy, then redeploy your Vercel site.
+On **Render**, the root `render.yaml` blueprint deploys both `ebby-site`
+(static) and `ebby-bot` (Python). The site build injects `EBBY_API_URL`
+automatically from the bot service — no manual URL edit needed.
 
 For **local development only**, temporarily set `window.EBBY_API` to
 `http://127.0.0.1:8765` (or whatever port uvicorn uses).
