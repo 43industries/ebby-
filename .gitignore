@@ -6,6 +6,10 @@
 *.sqlite
 *.sqlite3
 
+# --- node / Render static build output ---
+node_modules/
+dist/
+
 # --- python ---
 __pycache__/
 *.pyc

@@ -651,7 +651,7 @@
 
         revealElements.forEach(el => revealObserver.observe(el));
 
-        // Form handling -- POST to the EBBY Bot API /lead endpoint
+        // Contact form — POST to EBBY Bot API /lead (Render)
         document.getElementById('contactForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const form = e.target;
@@ -659,19 +659,19 @@
             const apiBase = (window.EBBY_API || '').replace(/\/+$/, '');
             const submitBtn = document.getElementById('contactSubmitBtn');
             const submitLabel = document.getElementById('contactSubmitLabel');
+            const originalLabel = submitLabel.textContent;
 
             if (!apiBase) {
                 showToast('Form is not configured (missing API base URL).');
                 return;
             }
             if (apiBase.indexOf('your-ebby-bot.onrender.com') !== -1) {
-                showToast('Deploy the bot on Render, then set window.EBBY_API in index.html to your real API URL.');
+                showToast('Bot is not deployed yet. Email hello@ebby.co.ke or try the chat when live.');
                 return;
             }
 
             submitBtn.disabled = true;
-            const originalLabel = submitLabel.textContent;
-            submitLabel.textContent = 'Sending...';
+            submitLabel.textContent = 'Sending…';
             try {
                 const resp = await fetch(apiBase + '/lead', {
                     method: 'POST',
@@ -727,14 +727,7 @@
         });
     </script>
 
-    <!-- ==========================================================
-         EBBY Bot (FastAPI on Render / Railway / Fly — not on Vercel)
-         1. Deploy the `bot/` folder (see render.yaml + bot/README.md).
-         2. Replace the URL below with your live API base (https, no trailing slash).
-         3. Redeploy Vercel so this page picks up the change.
-
-         Local dev: temporarily set to http://127.0.0.1:8765 (or your uvicorn port).
-         ========================================================== -->
+    <!-- EBBY Bot — API on Render (injected at build via scripts/inject-ebby-api.mjs) -->
     <script>
         window.EBBY_API = "https://your-ebby-bot.onrender.com";
     </script>
@@ -744,9 +737,7 @@
             var base = raw.replace(/\/+$/, "");
             var placeholder = "your-ebby-bot.onrender.com";
             if (!base || base.indexOf(placeholder) !== -1) {
-                console.warn(
-                    "[EBBY] Set window.EBBY_API in index.html to your deployed bot URL, then redeploy Vercel."
-                );
+                console.warn("[EBBY] Bot URL not configured yet.");
                 return;
             }
             var s = document.createElement("script");

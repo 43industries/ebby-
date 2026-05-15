@@ -1,21 +1,19 @@
-# Render Blueprint — deploy the FastAPI bot from the `bot/` directory.
-#
-# Dashboard: New → Blueprint → connect this repo → Render reads this file.
-#
-# After deploy, copy the service URL (e.g. https://ebby-bot-xxxx.onrender.com),
-# set it in index.html as window.EBBY_API, commit, and redeploy Vercel.
-#
-# Required env vars (add in Render dashboard → Environment):
-#   GROQ_API_KEY
-#   TELEGRAM_BOT_TOKEN          (or leave placeholder-like token skipped by app — better: real token)
-#   TELEGRAM_WEBHOOK_SECRET     (random string)
-#   ADMIN_CHAT_ID               (Telegram DM target for leads)
-#   PUBLIC_BASE_URL             (same as https URL of this service, no trailing slash)
-#   ADMIN_API_TOKEN             (random string for GET /leads)
-# Optional:
-#   ALLOWED_ORIGINS=https://your-site.vercel.app
+# Render Blueprint — marketing site (static) + FastAPI bot (`bot/`).
+# Dashboard: New → Blueprint → connect repo → add secret env vars below.
 
 services:
+  - type: web
+    name: ebby-site
+    runtime: static
+    buildCommand: node scripts/build-static.mjs
+    staticPublishPath: ./dist
+    envVars:
+      - key: EBBY_API_URL
+        fromService:
+          name: ebby-bot
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
+
   - type: web
     name: ebby-bot
     runtime: python
@@ -23,3 +21,22 @@ services:
     rootDir: bot
     buildCommand: pip install --prefer-binary -r requirements.txt
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PUBLIC_BASE_URL
+        fromService:
+          name: ebby-bot
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: ALLOWED_ORIGINS
+        fromService:
+          name: ebby-site
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: TELEGRAM_WEBHOOK_SECRET
+        generateValue: true
+      - key: ADMIN_API_TOKEN
+        generateValue: true
+      # Set in Render dashboard (required for chat + Telegram):
+      #   GROQ_API_KEY
+      # Optional:
+      #   TELEGRAM_BOT_TOKEN, ADMIN_CHAT_ID, SMTP_*
