@@ -1,0 +1,65 @@
+name: games-ci
+
+on:
+  push:
+    branches: [dev, main]
+    paths:
+      - "games/**"
+      - "docs/games/**"
+      - ".github/workflows/games-ci.yml"
+  pull_request:
+    paths:
+      - "games/**"
+      - "docs/games/**"
+      - ".github/workflows/games-ci.yml"
+
+jobs:
+  godot-import:
+    name: Godot 4 — import + headless boot
+    runs-on: ubuntu-latest
+    env:
+      GODOT_VERSION: "4.3"
+      PROJECT_DIR: games/ebby-title-01
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Godot binary
+        id: cache-godot
+        uses: actions/cache@v4
+        with:
+          path: ~/godot
+          key: godot-${{ env.GODOT_VERSION }}-linux
+
+      - name: Install Godot ${{ env.GODOT_VERSION }}
+        if: steps.cache-godot.outputs.cache-hit != 'true'
+        run: |
+          set -euo pipefail
+          mkdir -p ~/godot
+          cd ~/godot
+          wget -q "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          unzip -q "Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          mv "Godot_v${GODOT_VERSION}-stable_linux.x86_64" godot
+          chmod +x godot
+
+      - name: PATH
+        run: echo "$HOME/godot" >> "$GITHUB_PATH"
+
+      - name: Import project (catches script + resource errors)
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: |
+          set -euo pipefail
+          godot --headless --import 2>&1 | tee import.log
+          if grep -Ei "ERROR|SCRIPT ERROR" import.log; then
+            echo "::error::Godot reported errors during import"
+            exit 1
+          fi
+
+      - name: Headless boot smoke test (3s)
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: |
+          set -euo pipefail
+          timeout 5 godot --headless --quit-after 180 2>&1 | tee run.log || true
+          if grep -Ei "SCRIPT ERROR|ERROR: " run.log; then
+            echo "::error::Runtime error during headless boot"
+            exit 1
+          fi
